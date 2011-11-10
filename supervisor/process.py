@@ -105,7 +105,16 @@ class Subprocess:
         program = commandargs[0]
 
         if "/" in program:
-            filename = program
+            if program[0] == "/":
+                filename = program
+            else:
+                if self.config.directory:
+                    directory = self.config.directory
+                else:
+                    # should be the same than filename=program
+                    directory = os.getcwd()
+                filename = os.path.join(directory, program)
+
             try:
                 st = self.config.options.stat(filename)
             except OSError:
